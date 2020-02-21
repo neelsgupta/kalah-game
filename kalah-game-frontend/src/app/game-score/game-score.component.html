@@ -1,0 +1,81 @@
+<div class="container">
+  <div class="panel panel-default" style="border-color: #a03232;">
+    <div class="panel-body">
+      <div class="mb-2">
+        <button type="button" class="btn btn-secondary" (click)="resetGame()">Reset Game</button>
+      </div>
+      <div *ngIf="errorMsg" class="mb-2 alert alert-danger">
+        <strong>{{errorMsg}}</strong>
+      </div>
+      <div class="alert alert-info">
+        <strong>{{gameStatus}}</strong>
+      </div>
+    </div>
+    <div>
+      <div class="playerType mt-2" *ngIf="gameStatus=='IN_PROGRESS'">Now
+        <mark class="marker">{{playerName}}</mark>
+        turn !!
+      </div>
+      <div class="divPanel">
+        <section class="rowPlayer2">
+          <span class="navPlayer">Player 2</span>
+          <ul id="playerPlayer2" class="player-row-container">
+            <li>
+              <div class="circle circle-home circlePlayer2">{{board[14]}}</div>
+            </li>
+            <li class="pt-22">
+              <div class="circle circlePlayer2" (click)='nextMoveByPit(13)' [ngClass]="(nextPlayer=='2' && board[13]>0)?'bgColorGreen':'bgColorRed'">
+                {{board[13]}}
+              </div>
+            </li>
+            <li class="pt-22">
+              <div class="circle circlePlayer2" (click)='nextMoveByPit(12)' [ngClass]="(nextPlayer=='2' && board[12]>0)?'bgColorGreen':'bgColorRed'">
+                {{board[12]}}
+              </div>
+            </li>
+            <li class="pt-22">
+              <div class="circle circlePlayer2" (click)='nextMoveByPit(11)' [ngClass]="(nextPlayer=='2' && board[11]>0)?'bgColorGreen':'bgColorRed'">
+                {{board[11]}}
+              </div>
+            </li>
+            <li class="pt-22">
+              <div class="circle circlePlayer2" (click)='nextMoveByPit(10)' [ngClass]="(nextPlayer=='2' && board[10]>0)?'bgColorGreen':'bgColorRed'">
+                {{board[10]}}
+              </div>
+            </li>
+            <li class="pt-22">
+              <div class="circle circlePlayer2" [ngClass]="(nextPlayer=='2' && board[9]>0)?'bgColorGreen':'bgColorRed'" (click)='nextMoveByPit(9)'>
+                {{board[9]}}
+              </div>
+            </li>
+            <li class="pt-22">
+              <div class="circle circlePlayer2" [ngClass]="(nextPlayer=='2' && board[8]>0)?'bgColorGreen':'bgColorRed'" (click)='nextMoveByPit(8)'>
+                {{board[8]}}
+              </div>
+            </li>
+          </ul>
+        </section>
+        <section class="rowPlayer1">
+          <ul id="playerPlayer1" class="player-row-container">
+            <li class="pt-15">
+              <div class="circle" (click)='nextMoveByPit(1)' [ngClass]="(nextPlayer=='1' && board[1]>0)?'bgColorGreen p31':'bgColorRed'">{{board[1]}}</div>
+              <li class="pt-15">
+                <div class="circle" (click)='nextMoveByPit(2)' [ngClass]="(nextPlayer=='1' && board[2]>0)?'bgColorGreen p31':'bgColorRed'">{{board[2]}}</div>
+                <li class="pt-15">
+                  <div class="circle" (click)='nextMoveByPit(3)' [ngClass]="(nextPlayer=='1' && board[3]>0)?'bgColorGreen p31':'bgColorRed'">{{board[3]}}</div>
+                  <li class="pt-15">
+                    <div class="circle" (click)='nextMoveByPit(4)' [ngClass]="(nextPlayer=='1' && board[4]>0)?'bgColorGreen p31':'bgColorRed'">{{board[4]}}</div>
+                    <li class="pt-15">
+                      <div class="circle" (click)='nextMoveByPit(5)' [ngClass]="(nextPlayer=='1' && board[5]>0)?'bgColorGreen p31':'bgColorRed'">{{board[5]}}</div>
+                      <li class="pt-15">
+                        <div class="circle" (click)='nextMoveByPit(6)' [ngClass]="(nextPlayer=='1' && board[6]>0)?'bgColorGreen p31':'bgColorRed'">{{board[6]}}</div>
+                        <li class="pt-15">
+                          <div class="circle circle-home" style="padding:0px">{{board[7]}}</div>
+                        </li>
+          </ul>
+          <span class="navPlayer">Player 1</span>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
