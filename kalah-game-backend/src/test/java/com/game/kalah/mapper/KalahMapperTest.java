@@ -46,6 +46,7 @@ public class KalahMapperTest {
 		KalahMovedResponse kalahMove = kalahMapper.mapToMovedDto(initGame());
 		assertEquals(gameId, kalahMove.getId());
 		assertNotNull(kalahMove.getUri());
+		assertNotNull(kalahMove.getScore());
 		assertEquals(String.valueOf(Player.FIRST_PLAYER.getPlayerId()), kalahMove.getNextPlayer());
 		assertEquals(GameStatus.IN_PROGRESS, kalahMove.getGameStatus());
 	}

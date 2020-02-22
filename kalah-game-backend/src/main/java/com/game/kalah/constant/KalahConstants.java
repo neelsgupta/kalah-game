@@ -7,5 +7,5 @@ public class KalahConstants {
 	public static final int LAST_PIT_ID = 14;
 
 	public static final int INITIAL_STONES_QUANTITY = 6;
-	
+
 }

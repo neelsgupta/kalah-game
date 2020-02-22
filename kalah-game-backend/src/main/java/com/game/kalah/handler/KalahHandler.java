@@ -35,7 +35,7 @@ public class KalahHandler {
 				currentIndex = 0;
 			}
 			if (game.getPlayer().getNextPlayer().getHomeId() != currentPit) {
-				addStonesToPit(currentPit, scoreBoard, 1);
+				putStonesToKalahHomePit(currentPit, scoreBoard, 1);
 			} else {
 				if (currentIndex != KalahConstants.LAST_PIT_ID) {
 					lastIndex++;
@@ -46,18 +46,18 @@ public class KalahHandler {
 			}
 		}
 		lastPit = lastPit > KalahConstants.LAST_PIT_ID ? lastIndex : lastPit;
-		checkLastPit(lastPit, game);
+		checkPitLastStoneLanded(lastPit, game);
 
 		if (!playerGotFreeTurn(lastPit, game.getPlayer())) {
 			game.setPlayer(game.getPlayer().getNextPlayer());
 		}
-		if (isGameTerminated(game)) {
-			GameStatus winner = findTheWinner(game);
+		if (isGameEnded(game)) {
+			GameStatus winner = checkWinner(game);
 			game.setGameStatus(winner);
 		}
 		log.info("makeMove method ended.");
 	}
-	
+
 	private void validatePitId(int pitId, Game game) {
 		Player player = game.getPlayer();
 
@@ -79,14 +79,14 @@ public class KalahHandler {
 	 * @param lastPit
 	 * @param game
 	 */
-	private void checkLastPit(int lastPit, Game game) {
-		if (lastPitWasOwnEmptyPit(lastPit, game)) {
-			int oppositePit = getOppositePit(lastPit);
-			int oppositePitAmount = game.getScoreBoard().get(oppositePit);
-			if (oppositePitAmount != 0) {
+	private void checkPitLastStoneLanded(int lastPit, Game game) {
+		if (isLastStoneLandedPitOwnEmptyPit(lastPit, game)) {
+			int oppositePit = getOppositeSidePit(lastPit);
+			int oppositePitStoneCount = game.getScoreBoard().get(oppositePit);
+			if (oppositePitStoneCount != 0) {
 				clearPit(oppositePit, game.getScoreBoard());
 				clearPit(lastPit, game.getScoreBoard());
-				addStonesToPit(game.getPlayer().getHomeId(), game.getScoreBoard(), oppositePitAmount + 1);
+				putStonesToKalahHomePit(game.getPlayer().getHomeId(), game.getScoreBoard(), oppositePitStoneCount + 1);
 			}
 		}
 	}
@@ -98,25 +98,26 @@ public class KalahHandler {
 	 * @param game
 	 * @return true if the game is terminated.
 	 */
-	private boolean isGameTerminated(Game game) {
+	private boolean isGameEnded(Game game) {
 		Player player = game.getPlayer();
 		List<Integer> pits = player.getPits();
 		Map<Integer, Integer> scoreBoard = game.getScoreBoard();
 
-		boolean playerPitsAreEmpty = pits.stream().map(scoreBoard::get).allMatch(stoneNumbers -> stoneNumbers == 0);
-
-		boolean oppositePlayerPitsAreEmpty = player.getNextPlayer().getPits().stream().map(scoreBoard::get)
+		boolean currentPlayerAllPitsEmpty = pits.stream().map(scoreBoard::get)
 				.allMatch(stoneNumbers -> stoneNumbers == 0);
 
-		if (playerPitsAreEmpty || oppositePlayerPitsAreEmpty) {
-			addAllRemainedStonesToHome(player, scoreBoard);
-			addAllRemainedStonesToHome(player.getNextPlayer(), scoreBoard);
+		boolean oppositePlayerAllPitsEmpty = player.getNextPlayer().getPits().stream().map(scoreBoard::get)
+				.allMatch(stoneNumbers -> stoneNumbers == 0);
+
+		if (currentPlayerAllPitsEmpty || oppositePlayerAllPitsEmpty) {
+			moveStonesToKalahHome(player, scoreBoard);
+			moveStonesToKalahHome(player.getNextPlayer(), scoreBoard);
 			return true;
 		}
 		return false;
 	}
 
-	private void addAllRemainedStonesToHome(Player player, Map<Integer, Integer> scoreBoard) {
+	private void moveStonesToKalahHome(Player player, Map<Integer, Integer> scoreBoard) {
 		player.getPits().forEach(pit -> {
 			int amount = scoreBoard.get(pit);
 			if (amount != 0) {
@@ -127,7 +128,7 @@ public class KalahHandler {
 		});
 	}
 
-	private GameStatus findTheWinner(Game game) {
+	private GameStatus checkWinner(Game game) {
 		Map<Integer, Integer> board = game.getScoreBoard();
 		int firstPlayerStones = board.get(Player.FIRST_PLAYER.getHomeId());
 		int secondPlayerStones = board.get(Player.SECOND_PLAYER.getHomeId());
@@ -140,7 +141,7 @@ public class KalahHandler {
 		}
 	}
 
-	private boolean lastPitWasOwnEmptyPit(int lastPitId, Game game) {
+	private boolean isLastStoneLandedPitOwnEmptyPit(int lastPitId, Game game) {
 		Map<Integer, Integer> scoreBoard = game.getScoreBoard();
 		return scoreBoard.get(lastPitId) == 1 && isPlayerPit(lastPitId, game.getPlayer());
 	}
@@ -149,7 +150,7 @@ public class KalahHandler {
 		return player.getPits().contains(pitId);
 	}
 
-	private int getOppositePit(int pitId) {
+	private int getOppositeSidePit(int pitId) {
 		return KalahConstants.LAST_PIT_ID - pitId;
 	}
 
@@ -157,7 +158,7 @@ public class KalahHandler {
 		return player.getHomeId() == lastPitId;
 	}
 
-	private void addStonesToPit(int pitId, Map<Integer, Integer> scoreBoard, int numberOfStones) {
+	private void putStonesToKalahHomePit(int pitId, Map<Integer, Integer> scoreBoard, int numberOfStones) {
 		log.debug("add stones for pitId: " + pitId);
 		scoreBoard.replace(pitId, scoreBoard.get(pitId) + numberOfStones);
 	}

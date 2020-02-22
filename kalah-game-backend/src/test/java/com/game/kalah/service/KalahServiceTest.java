@@ -75,7 +75,7 @@ public class KalahServiceTest {
 
 		verify(repository).findById(gameId);
 		verify(kalahHandler, never()).makeMove(game, pitId);
-		verify(repository, never()).save( game);
+		verify(repository, never()).save(game);
 		verify(repository, never()).delete(game);
 	}
 
@@ -89,7 +89,7 @@ public class KalahServiceTest {
 		verify(repository).findById(gameId);
 		verify(repository).delete(game);
 		verify(kalahHandler, never()).makeMove(game, pitId);
-		verify(repository, never()).save( game);
+		verify(repository, never()).save(game);
 	}
 
 }

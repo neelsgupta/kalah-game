@@ -42,7 +42,7 @@ public class KalahControllerTest {
 	private KalahMapper kalahMapper;
 
 	private Game game;
-	
+
 	private Integer pitId = 1;
 
 	@Before
@@ -62,14 +62,14 @@ public class KalahControllerTest {
 		assertEquals(responseEntity.getStatusCode(), HttpStatus.CREATED);
 		assertEquals(responseEntity.getBody(), kalahInitResponse);
 	}
-	
+
 	@Test
-	public void testGetGame(){
+	public void testGetGame() {
 		KalahMovedResponse kalahMovedResponse = new KalahMovedResponse();
 		when(kalahService.get(anyString())).thenReturn(game);
 		when(kalahMapper.mapToMovedDto(game)).thenReturn(kalahMovedResponse);
 		ResponseEntity<KalahMovedResponse> responseEntity = kalahController.getGame(anyString());
-		
+
 		verify(kalahService).get(anyString());
 		verify(kalahMapper).mapToMovedDto(game);
 		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);

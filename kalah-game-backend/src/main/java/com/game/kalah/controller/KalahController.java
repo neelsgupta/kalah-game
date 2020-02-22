@@ -47,6 +47,7 @@ public class KalahController {
 		KalahInitResponse kalahInitResponse = kalahMapper.mapToIntiDto(game);
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("URL", kalahInitResponse.getUri());
+		headers.add("Access-Control-Allow-Origin", "*");
 
 		log.info("exiting to createGame endpoint.");
 		return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(kalahInitResponse);

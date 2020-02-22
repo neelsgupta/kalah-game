@@ -1,6 +1,5 @@
 package com.game.kalah.dto;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
