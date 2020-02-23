@@ -20,3 +20,6 @@ The Game Ends
 The application is splitted into two seperate sections :
 - kalah-game-backend (server): A Java based sprint boot Restful webservice. Which has API to create, get and play the game.
 - kalah-game-frontend (client): A frontend Angular app which uses backend server RestFull API to display the game.
+
+## Limitation
+Two players have to play on the same screen.
