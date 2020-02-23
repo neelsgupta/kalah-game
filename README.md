@@ -23,3 +23,6 @@ The application is splitted into two seperate sections :
 
 ## Limitation
 Two players have to play on the same screen.
+
+## Authors
+* **Nilesh Gupta** - [Nilesh Gupta](neeleshgupta077@gmail.com)
