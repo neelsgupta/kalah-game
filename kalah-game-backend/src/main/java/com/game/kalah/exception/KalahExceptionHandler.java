@@ -18,7 +18,7 @@ public class KalahExceptionHandler extends ResponseEntityExceptionHandler {
 		KalahErrorResponse kalahErrorResponse = new KalahErrorResponse();
 		kalahErrorResponse.setId(ex.getId());
 		kalahErrorResponse.setMessage(ex.getMessage());
-		return new ResponseEntity<KalahErrorResponse>(kalahErrorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(kalahErrorResponse, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(GameEndedException.class)
@@ -27,6 +27,6 @@ public class KalahExceptionHandler extends ResponseEntityExceptionHandler {
 		KalahErrorResponse kalahErrorResponse = new KalahErrorResponse();
 		kalahErrorResponse.setMessage(ex.getMessage());
 		kalahErrorResponse.setGameStatus(ex.getGameStatus());
-		return new ResponseEntity<KalahErrorResponse>(kalahErrorResponse, HttpStatus.CONFLICT);
+		return new ResponseEntity<>(kalahErrorResponse, HttpStatus.CONFLICT);
 	}
 }

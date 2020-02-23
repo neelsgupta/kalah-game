@@ -6,10 +6,17 @@ public class GameEndedException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	private String gameId;
-	private String message;
-	private GameStatus gameStatus;
+	private final String gameId;
+	private final String message;
+	private final GameStatus gameStatus;
 
+	/**
+	 * Maps the GameEndedException with gameId, message and respective game status
+	 * 
+	 * @param gameId
+	 * @param message
+	 * @param gameStatus
+	 */
 	public GameEndedException(String gameId, String message, GameStatus gameStatus) {
 		super();
 		this.gameId = gameId;
@@ -21,6 +28,7 @@ public class GameEndedException extends RuntimeException {
 		return gameId;
 	}
 
+	@Override
 	public String getMessage() {
 		return message;
 	}

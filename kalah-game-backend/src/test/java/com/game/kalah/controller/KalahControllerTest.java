@@ -77,7 +77,7 @@ public class KalahControllerTest {
 	}
 
 	@Test
-	public void testPlayGame() throws Exception {
+	public void testPlayGame() {
 		KalahMovedResponse kalahMovedResponse = new KalahMovedResponse();
 		doNothing().when(kalahValidator).validatePitId(pitId);
 		when(kalahService.play(anyString(), anyInt())).thenReturn(game);
@@ -92,8 +92,7 @@ public class KalahControllerTest {
 	}
 
 	@Test(expected = InvalidIdException.class)
-	public void testPlayGameThrowExceptionIfInvalidGameId() throws Exception {
-		Game game = new Game();
+	public void testPlayGameThrowExceptionIfInvalidGameId() {
 		doThrow(InvalidIdException.class).when(kalahValidator).validatePitId(pitId);
 		kalahController.playGame(anyString(), pitId);
 

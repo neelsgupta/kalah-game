@@ -4,10 +4,18 @@ public class InvalidIdException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	private String id;
+	private final String id;
 
-	private String message;
+	private final String message;
 
+	/**
+	 * Maps the InvalidIdException for respective id and message
+	 * 
+	 * @param id
+	 *            is gameId or pitId for failure
+	 * @param message
+	 *            message for respective failure
+	 */
 	public InvalidIdException(String id, String message) {
 		super();
 		this.id = id;
@@ -18,16 +26,9 @@ public class InvalidIdException extends RuntimeException {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
+	@Override
 	public String getMessage() {
 		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 }

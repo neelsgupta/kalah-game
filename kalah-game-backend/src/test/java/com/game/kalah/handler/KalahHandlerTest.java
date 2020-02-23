@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -25,9 +26,12 @@ public class KalahHandlerTest {
 
 	private Game game = new Game();
 	private Map<Integer, Integer> scoreBoard;
+	private static final String CHECKPITLASTSTONELANDED = "checkPitLastStoneLanded";
+	private static final String ISGAMEENDED = "isGameEnded";
+	private static final String CHECKWINNER = "checkWinner";
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		game = setGameAttributes(game);
 		scoreBoard = game.getScoreBoard();
 	}
@@ -54,15 +58,14 @@ public class KalahHandlerTest {
 		handler.makeMove(game, pitId);
 
 		IntStream.range(pitId + 1, pitAmount + 1).forEach(pit -> {
-			int amount = scoreBoard.get(pit);
-			assertEquals(amount, beforeMove.get(pit) + 1);
+			int stoneCount = scoreBoard.get(pit);
+			assertEquals(stoneCount, beforeMove.get(pit) + 1);
 		});
 	}
 
 	@Test(expected = InvalidIdException.class)
 	public void testValidatePitIdForOtherPlayer() {
 		int pitId = 9;
-		Game game = new Game();
 		game.setPlayer(Player.FIRST_PLAYER);
 		handler.makeMove(game, pitId);
 	}
@@ -75,16 +78,17 @@ public class KalahHandlerTest {
 	}
 
 	@Test
-	public void testIsGameEndedFalse() throws Exception {
-		Method isGameEnded = handlerClass.getDeclaredMethod("isGameEnded", Game.class);
+	public void testIsGameEndedFalse() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		Method isGameEnded = handlerClass.getDeclaredMethod(ISGAMEENDED, Game.class);
 		setMethodAccessibleTrue(isGameEnded);
 		boolean result = (boolean) isGameEnded.invoke(handler, game);
 		assertFalse(result);
 	}
 
 	@Test
-	public void testIsGameEndedTruePlayerOneSideGoneOutOfStone() throws Exception {
-		Method isGameEnded = handlerClass.getDeclaredMethod("isGameEnded", Game.class);
+	public void testIsGameEndedTruePlayerOneSideGoneOutOfStone()
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		Method isGameEnded = handlerClass.getDeclaredMethod(ISGAMEENDED, Game.class);
 		setMethodAccessibleTrue(isGameEnded);
 		game.getScoreBoard().entrySet().stream().filter(k -> k.getKey().intValue() < 7).forEach(l -> l.setValue(0));
 
@@ -93,8 +97,9 @@ public class KalahHandlerTest {
 	}
 
 	@Test
-	public void testIsGameEndedTruePlayerTwoSideGoneOutOfStone() throws Exception {
-		Method isGameEnded = handlerClass.getDeclaredMethod("isGameEnded", Game.class);
+	public void testIsGameEndedTruePlayerTwoSideGoneOutOfStone()
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		Method isGameEnded = handlerClass.getDeclaredMethod(ISGAMEENDED, Game.class);
 		setMethodAccessibleTrue(isGameEnded);
 		game.getScoreBoard().entrySet().stream().filter(k -> k.getKey().intValue() > 7).forEach(l -> l.setValue(0));
 
@@ -103,8 +108,9 @@ public class KalahHandlerTest {
 	}
 
 	@Test
-	public void testCheckWinnerIfFirstPlayerWins() throws Exception {
-		Method checkWinner = handlerClass.getDeclaredMethod("checkWinner", Game.class);
+	public void testCheckWinnerIfFirstPlayerWins()
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		Method checkWinner = handlerClass.getDeclaredMethod(CHECKWINNER, Game.class);
 		setMethodAccessibleTrue(checkWinner);
 		game.getScoreBoard().entrySet().stream().filter(firstPlayerHome -> firstPlayerHome.getKey().intValue() == 7)
 				.forEach(firstPlayerHomeStoneCount -> firstPlayerHomeStoneCount.setValue(48));
@@ -114,8 +120,9 @@ public class KalahHandlerTest {
 	}
 
 	@Test
-	public void testCheckWinnerIfSecoundPlayerWins() throws Exception {
-		Method checkWinner = handlerClass.getDeclaredMethod("checkWinner", Game.class);
+	public void testCheckWinnerIfSecoundPlayerWins()
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		Method checkWinner = handlerClass.getDeclaredMethod(CHECKWINNER, Game.class);
 		setMethodAccessibleTrue(checkWinner);
 		game.getScoreBoard().entrySet().stream().filter(firstPlayerHome -> firstPlayerHome.getKey().intValue() == 14)
 				.forEach(firstPlayerHomeStoneCount -> firstPlayerHomeStoneCount.setValue(52));
@@ -125,8 +132,9 @@ public class KalahHandlerTest {
 	}
 
 	@Test
-	public void testCheckWinnerIfGameDraws() throws Exception {
-		Method checkWinner = handlerClass.getDeclaredMethod("checkWinner", Game.class);
+	public void testCheckWinnerIfGameDraws()
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		Method checkWinner = handlerClass.getDeclaredMethod(CHECKWINNER, Game.class);
 		setMethodAccessibleTrue(checkWinner);
 		game.getScoreBoard().entrySet().stream()
 				.filter(firstPlayerHome -> (firstPlayerHome.getKey().intValue() == 7
@@ -136,53 +144,56 @@ public class KalahHandlerTest {
 		GameStatus gameStatus = (GameStatus) checkWinner.invoke(handler, game);
 		assertEquals(GameStatus.DRAW, gameStatus);
 	}
-	
+
 	@Test
-	public void testCheckPitLastStoneLandedInEmptyOwnPit() throws Exception {
-		Method checkPitLastStoneLanded = handlerClass.getDeclaredMethod("checkPitLastStoneLanded", int.class, Game.class);
+	public void testCheckPitLastStoneLandedInEmptyOwnPit()
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		Method checkPitLastStoneLanded = handlerClass.getDeclaredMethod(CHECKPITLASTSTONELANDED, int.class, Game.class);
 		setMethodAccessibleTrue(checkPitLastStoneLanded);
 		game.getScoreBoard().replace(5, 1);
 		checkPitLastStoneLanded.invoke(handler, 5, game);
-		
-		assertEquals(game.getScoreBoard().get(7),Integer.valueOf(7));
-		assertEquals(game.getScoreBoard().get(5),Integer.valueOf(0));
-		assertEquals(game.getScoreBoard().get(9),Integer.valueOf(0));
+
+		assertEquals(game.getScoreBoard().get(7), Integer.valueOf(7));
+		assertEquals(game.getScoreBoard().get(5), Integer.valueOf(0));
+		assertEquals(game.getScoreBoard().get(9), Integer.valueOf(0));
 	}
-	
+
 	@Test
-	public void testCheckPitLastStoneLandedInNonEmptyOwnPit() throws Exception {
-		Method checkPitLastStoneLanded = handlerClass.getDeclaredMethod("checkPitLastStoneLanded", int.class, Game.class);
+	public void testCheckPitLastStoneLandedInNonEmptyOwnPit()
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		Method checkPitLastStoneLanded = handlerClass.getDeclaredMethod(CHECKPITLASTSTONELANDED, int.class, Game.class);
 		setMethodAccessibleTrue(checkPitLastStoneLanded);
 		game.getScoreBoard().replace(5, 4);
 		checkPitLastStoneLanded.invoke(handler, 5, game);
-		
-		assertEquals(game.getScoreBoard().get(7),Integer.valueOf(0));
-		assertEquals(game.getScoreBoard().get(5),Integer.valueOf(4));
-		assertEquals(game.getScoreBoard().get(9),Integer.valueOf(6));
+
+		assertEquals(game.getScoreBoard().get(7), Integer.valueOf(0));
+		assertEquals(game.getScoreBoard().get(5), Integer.valueOf(4));
+		assertEquals(game.getScoreBoard().get(9), Integer.valueOf(6));
 	}
-	
+
 	@Test
-	public void testCheckPitLastStoneLandedInEmptyOwnPitWithEmptyOppositePit() throws Exception {
-		Method checkPitLastStoneLanded = handlerClass.getDeclaredMethod("checkPitLastStoneLanded", int.class, Game.class);
+	public void testCheckPitLastStoneLandedInEmptyOwnPitWithEmptyOppositePit()
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		Method checkPitLastStoneLanded = handlerClass.getDeclaredMethod(CHECKPITLASTSTONELANDED, int.class, Game.class);
 		setMethodAccessibleTrue(checkPitLastStoneLanded);
 		game.getScoreBoard().replace(5, 1);
 		game.getScoreBoard().replace(9, 0);
 		checkPitLastStoneLanded.invoke(handler, 5, game);
-		
-		assertEquals(game.getScoreBoard().get(7),Integer.valueOf(0));
-		assertEquals(game.getScoreBoard().get(5),Integer.valueOf(1));
-		assertEquals(game.getScoreBoard().get(9),Integer.valueOf(0));
+
+		assertEquals(game.getScoreBoard().get(7), Integer.valueOf(0));
+		assertEquals(game.getScoreBoard().get(5), Integer.valueOf(1));
+		assertEquals(game.getScoreBoard().get(9), Integer.valueOf(0));
 	}
 
 	private Game setGameAttributes(Game game) {
-		Map<Integer, Integer> scoreBoard = new LinkedHashMap<>();
+		Map<Integer, Integer> gameScoreBoard = new LinkedHashMap<>();
 		for (int i = 1; i <= 14; i++) {
 			int value = (i != 7 && i != 14) ? 6 : 0;
-			scoreBoard.put(i, value);
+			gameScoreBoard.put(i, value);
 		}
 		game.setPlayer(Player.FIRST_PLAYER);
 		game.setGameStatus(GameStatus.IN_PROGRESS);
-		game.setScoreBoard(scoreBoard);
+		game.setScoreBoard(gameScoreBoard);
 
 		return game;
 	}

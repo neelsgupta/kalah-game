@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.game.kalah.domain.Game;
 import com.game.kalah.domain.GameStatus;
@@ -22,7 +22,7 @@ import com.game.kalah.handler.KalahHandler;
 import com.game.kalah.mapper.KalahMapper;
 import com.game.kalah.repository.GameRepository;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class KalahServiceTest {
 
 	@InjectMocks
@@ -52,7 +52,7 @@ public class KalahServiceTest {
 	}
 
 	@Test
-	public void testPlayGame() throws Exception {
+	public void testPlayGame() {
 		Game game = new Game();
 		game.setGameStatus(GameStatus.IN_PROGRESS);
 		Optional<Game> optionalGame = Optional.ofNullable(game);
@@ -68,7 +68,7 @@ public class KalahServiceTest {
 	}
 
 	@Test(expected = InvalidIdException.class)
-	public void testPlayGameThrowExceptionIfGameNotExisted() throws Exception {
+	public void testPlayGameThrowExceptionIfGameNotExisted() {
 		Game game = new Game();
 		doThrow(InvalidIdException.class).when(repository).findById(gameId);
 		kalahService.play(gameId, pitId);
@@ -80,7 +80,7 @@ public class KalahServiceTest {
 	}
 
 	@Test(expected = GameEndedException.class)
-	public void testPlayGameThrowExceptionIfGameNotInProgress() throws Exception {
+	public void testPlayGameThrowExceptionIfGameNotInProgress() {
 		Game game = new Game();
 		Optional<Game> optionalGame = Optional.ofNullable(game);
 		when(repository.findById(gameId)).thenReturn(optionalGame);

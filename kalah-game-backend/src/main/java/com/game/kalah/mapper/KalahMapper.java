@@ -25,6 +25,12 @@ public class KalahMapper {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
+	/**
+	 * Maps the game to return an initial state of the game
+	 * 
+	 * @param game
+	 * @return initial stage of the game
+	 */
 	public KalahInitResponse mapToIntiDto(Game game) {
 		log.debug("mapToIntiDto method started.");
 		KalahInitResponse kalahInit = new KalahInitResponse();
@@ -35,6 +41,12 @@ public class KalahMapper {
 		return kalahInit;
 	}
 
+	/**
+	 * Maps the game object to moved response for response entity
+	 * 
+	 * @param game
+	 * @return mapped moved response
+	 */
 	public KalahMovedResponse mapToMovedDto(Game game) {
 		log.debug("mapToMovedDto method started.");
 		KalahMovedResponse response = new KalahMovedResponse();
@@ -48,6 +60,11 @@ public class KalahMapper {
 		return response;
 	}
 
+	/**
+	 * creates the initial state of the game
+	 * 
+	 * @return the newly created game with unique gameId
+	 */
 	public Game createGame() {
 		log.info("createGame method started.");
 		Game game = new Game();
@@ -71,8 +88,7 @@ public class KalahMapper {
 	}
 
 	private String createGameURL(String gameId) {
-		String url = "http://localhost:" + port + "/games/" + gameId;
-		return url;
+		return "http://localhost:" + port + "/games/" + gameId;
 	}
 
 }

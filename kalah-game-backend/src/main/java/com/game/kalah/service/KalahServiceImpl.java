@@ -21,10 +21,10 @@ public class KalahServiceImpl implements KalahService {
 	private GameRepository gameRepository;
 
 	@Autowired
-	public KalahMapper kalahMapper;
+	private KalahMapper kalahMapper;
 
 	@Autowired
-	public KalahHandler kalahHandler;
+	private KalahHandler kalahHandler;
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -41,7 +41,7 @@ public class KalahServiceImpl implements KalahService {
 
 	@Override
 	@Transactional
-	public Game get(String gameId) throws InvalidIdException {
+	public Game get(String gameId) {
 		log.info("get game started");
 
 		Game game = gameRepository.findById(gameId)
@@ -53,13 +53,13 @@ public class KalahServiceImpl implements KalahService {
 
 	@Override
 	@Transactional
-	public Game play(String gameId, Integer pitId) throws Exception {
-		log.info("game play method started for gameId: " + gameId);
+	public Game play(String gameId, Integer pitId) {
+		log.info("game play method started for gameId: {}" , gameId);
 		Game game = get(gameId);
 		checkGameStatus(game);
 		kalahHandler.makeMove(game, pitId);
 		gameRepository.save(game);
-		log.info("game play method ended for gameId: " + gameId);
+		log.info("game play method ended for gameId: {}" , gameId);
 		return game;
 	}
 

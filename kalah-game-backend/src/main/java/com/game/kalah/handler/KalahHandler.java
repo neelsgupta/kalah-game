@@ -18,6 +18,12 @@ public class KalahHandler {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
+	/**
+	 * Make move for given pitId to respective game.
+	 * 
+	 * @param game
+	 * @param pitId
+	 */
 	public void makeMove(Game game, int pitId) {
 		log.info("makeMove method started.");
 		validatePitId(pitId, game);
@@ -58,6 +64,14 @@ public class KalahHandler {
 		log.info("makeMove method ended.");
 	}
 
+	/**
+	 * If pitId selected belongs to other player throws InvalidIdException if
+	 * pitId selected is empty pit throws InvalidIdException.
+	 * 
+	 * @param pitId
+	 *            selected to make a move
+	 * @param game
+	 */
 	private void validatePitId(int pitId, Game game) {
 		Player player = game.getPlayer();
 
@@ -66,17 +80,18 @@ public class KalahHandler {
 			throw new InvalidIdException(String.valueOf(pitId), "It is other player turn.");
 		}
 		if (game.getScoreBoard().get(pitId) == 0) {
-			log.error("The pitId selected is empty. " + pitId);
+			log.error("The pitId selected is empty. ");
 			throw new InvalidIdException(String.valueOf(pitId), "pitId selected is an empty pit.");
 		}
 	}
 
 	/**
 	 * Checks pit where the last stone landed. If the pit is own empty pit
-	 * captures this stone and all stones in the opposite pit and puts them in
-	 * own Kalah.
+	 * captures this stone and all stones in the opposite pit and puts them into
+	 * own kalah home.
 	 *
 	 * @param lastPit
+	 *            pitId selected
 	 * @param game
 	 */
 	private void checkPitLastStoneLanded(int lastPit, Game game) {
@@ -92,7 +107,7 @@ public class KalahHandler {
 	}
 
 	/**
-	 * If the game is terminated adds all remained stones to Kalah of each
+	 * If the game is ended adds all remained stones to kalah home for each
 	 * player.
 	 *
 	 * @param game
@@ -128,6 +143,12 @@ public class KalahHandler {
 		});
 	}
 
+	/**
+	 * checks the winner of the game.
+	 * 
+	 * @param game
+	 * @return
+	 */
 	private GameStatus checkWinner(Game game) {
 		Map<Integer, Integer> board = game.getScoreBoard();
 		int firstPlayerStones = board.get(Player.FIRST_PLAYER.getHomeId());
@@ -146,6 +167,13 @@ public class KalahHandler {
 		return scoreBoard.get(lastPitId) == 1 && isPlayerPit(lastPitId, game.getPlayer());
 	}
 
+	/**
+	 * checks the pitId selected belongs to the player.
+	 * 
+	 * @param pitId selected pitId
+	 * @param player current turn
+	 * @return
+	 */
 	private boolean isPlayerPit(int pitId, Player player) {
 		return player.getPits().contains(pitId);
 	}
@@ -159,12 +187,12 @@ public class KalahHandler {
 	}
 
 	private void putStonesToKalahHomePit(int pitId, Map<Integer, Integer> scoreBoard, int numberOfStones) {
-		log.debug("add stones for pitId: " + pitId);
+		log.debug("add stones for pitId: {}" , pitId);
 		scoreBoard.replace(pitId, scoreBoard.get(pitId) + numberOfStones);
 	}
 
 	private void clearPit(int pitId, Map<Integer, Integer> scoreBoard) {
-		log.debug("clearing pit for pitId: " + pitId);
+		log.debug("clearing pit for pitId: {}" , pitId);
 		scoreBoard.replace(pitId, 0);
 	}
 

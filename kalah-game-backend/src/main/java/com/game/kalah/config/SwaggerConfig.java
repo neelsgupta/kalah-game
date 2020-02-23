@@ -15,6 +15,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
+	
+	/**
+	 * Scans the mentioned package and creates the swagger documentation 
+	 * 
+	 * @return
+	 *       documentation for convenience methods for configuration
+	 */
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
@@ -29,10 +36,9 @@ public class SwaggerConfig {
 		Contact contact = new Contact("Nilesh Gupta", null, "neeleshgupta077@gmail.com");
 		return new ApiInfoBuilder()
 				.title("Kalah Game")
-				.description("Java RESTful Web Service API")
+				.description("Java RESTful Web Service API For Kalah Game")
 				.contact(contact)
 				.version("1.0.0")
 				.build();
-
 	}
 }

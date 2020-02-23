@@ -31,13 +31,13 @@ public class KalahController {
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	public KalahValidator kalahValidator;
+	private KalahValidator kalahValidator;
 
 	@Autowired
-	public KalahService kalahService;
+	private KalahService kalahService;
 
 	@Autowired
-	public KalahMapper kalahMapper;
+	private KalahMapper kalahMapper;
 
 	@PostMapping(GAMES)
 	public ResponseEntity<KalahInitResponse> createGame() {
@@ -47,7 +47,6 @@ public class KalahController {
 		KalahInitResponse kalahInitResponse = kalahMapper.mapToIntiDto(game);
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("URL", kalahInitResponse.getUri());
-		headers.add("Access-Control-Allow-Origin", "*");
 
 		log.info("exiting to createGame endpoint.");
 		return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(kalahInitResponse);
@@ -66,7 +65,7 @@ public class KalahController {
 
 	@PutMapping(PLAY_GAME)
 	public ResponseEntity<KalahMovedResponse> playGame(@PathVariable("gameId") String gameId,
-			@PathVariable("pitId") Integer pitId) throws Exception {
+			@PathVariable("pitId") Integer pitId) {
 		log.info("entering to playGame endpoint.");
 
 		kalahValidator.validatePitId(pitId);

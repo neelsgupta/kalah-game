@@ -1,6 +1,9 @@
 package com.game.kalah.constant;
 
 public class KalahConstants {
+	
+	private KalahConstants() {
+	}
 
 	public static final int FIRST_PIT_ID = 1;
 

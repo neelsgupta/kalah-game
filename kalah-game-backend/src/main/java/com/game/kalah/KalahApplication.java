@@ -2,9 +2,6 @@ package com.game.kalah;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 public class KalahApplication {
@@ -12,15 +9,5 @@ public class KalahApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(KalahApplication.class, args);
 	}
-	
-	/*@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/").allowedOrigins("http://localhost:4200");
-			}
-		};
-	}*/
 
 }

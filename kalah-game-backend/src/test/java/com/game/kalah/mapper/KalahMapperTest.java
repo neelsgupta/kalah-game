@@ -9,7 +9,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.game.kalah.domain.Game;
 import com.game.kalah.domain.GameStatus;
@@ -17,7 +17,7 @@ import com.game.kalah.domain.Player;
 import com.game.kalah.dto.KalahInitResponse;
 import com.game.kalah.dto.KalahMovedResponse;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class KalahMapperTest {
 
 	@InjectMocks
